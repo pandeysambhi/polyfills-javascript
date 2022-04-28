@@ -1,17 +1,20 @@
-const obj = {
-  a: this,
-  b: function () {
-    return this;
-  },
-  c: () => {
-    return this;
-  },
-  d() {
-    return this;
-  },
-  e: function () {
-    return this.a;
+Function.prototype.myBind = function (...args) {
+  let context = this;
+  return function (...args2) {
+    context.apply(args[0], [...args.slice(1), ...args2]);
+  };
+};
+
+let person = {
+  fname: "Dia",
+  lname: "Mirza",
+  getname: function (country) {
+    return this.fname + " " + this.lname + " from " + country;
   },
 };
-const newObj = obj;
-console.log(typeof obj.c());
+
+let newPerson = { fname: "Dodo", lname: "Dida" };
+
+let fn = person.getname.myBind(newPerson, ["delhi"]);
+
+console.log(fn());
